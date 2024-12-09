@@ -4,16 +4,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Web Project</title>
+  <title>TOP | Tic-Tac-Toe | JS</title>
   <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
   <header>
-    <h1>Welcome to My Web Project</h1>
+    <h1>Tic-Tac-Toe</h1>
   </header>
   <main>
-    <p>This is a simple web project structure.</p>
+    <h2>Game board</h2>
+    <div class="game-board-container">
+      <div id="game-board">
+        <div class="row">
+          <button class="cell" data-row="0" data-col="0"> </button>
+          <button class="cell" data-row="0" data-col="1"> </button>
+          <button class="cell" data-row="0" data-col="2"> </button>
+        </div>
+        <div class="row">
+          <button class="cell" data-row="1" data-col="0"> </button>
+          <button class="cell" data-row="1" data-col="1"> </button>
+          <button class="cell" data-row="1" data-col="2"> </button>
+        </div>
+        <div class="row">
+          <button class="cell" data-row="2" data-col="0"> </button>
+          <button class="cell" data-row="2" data-col="1"> </button>
+          <button class="cell" data-row="2" data-col="2"> </button>
+        </div>
+      </div>
+    </div>
+    <div class="game-info-container">
+      <div id="game-info">
+        <p id="winner-name">Winner: <span id="winner"></span></p>
+        <!-- TODO: turn number, player names -->
+      </div>
+    </div>
+    <div class="game-actions-container">
+      <div id="game-actions">
+        <!-- TODO: reset board button -->
+      </div>
+    </div>
   </main>
   <footer>
     <p>&copy; 2023 My Web Project</p>
