@@ -45,16 +45,6 @@ const game = (function () {
       return [downDiag, upDiag];
     };
 
-    const printBoard = function (turnNum) {
-      const header = `------Turn ${turnNum}------`;
-      const footer = '-----------------';
-      console.log(header);
-      for (let i = 0; i < numberOfRows;) {
-        console.log(` ${rows[i++].join(' | ')} `);
-      }
-      console.log(footer);
-    };
-
     const isEmptyAt = function (m, n) {
       return rows[m][n] === 0;
     };
@@ -89,7 +79,7 @@ const game = (function () {
       return result;
     };
 
-    return { numberOfRows, rows, printBoard, isEmptyAt, checkResult };
+    return { rows, isEmptyAt, checkResult };
   })();
 
   const players = (function () {
@@ -123,8 +113,14 @@ const game = (function () {
     }
   }
 
-  function handleButtonClick(row, col, button) {
+  function placePiece(row, col, button) {
     const player = (turnNumber % 2) ? players.p1 : players.p2;
+    const displayTurnNumber = function () {
+      const turnNumberSpan = document.getElementById('turn-number');
+      turnNumberSpan.innerText = `${turnNumber}`;
+    }
+
+    displayTurnNumber();
     if (board.isEmptyAt(row, col)) {
       board.rows[row][col] = player.piece;
       button.innerText = player.piece === 1 ? 'X' : 'O';
@@ -147,16 +143,47 @@ const game = (function () {
     printGameResult();
   }
 
-  return { handleButtonClick, winner };
+  function resetGame() {
+    const cells = document.querySelectorAll('.cell');
+
+    const clearText = (function () {
+      cells.forEach(cell => {
+        cell.innerText = '';
+      });
+    })();
+
+    const resetBoard = (function () {
+      board.rows.forEach(row => {
+        row.fill(0);
+      });
+    })();
+
+    const restoreInitialState = (function () {
+      playerNumber = 1;
+      turnNumber = 1;
+      winner = null;
+    })();
+
+    const resetDisplay = (function () {
+      document.getElementById('winner-name').style.display = 'none';
+      document.getElementById('turn-number').innerText = '1';
+    })();
+  }
+
+  return { placePiece, resetGame };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buttons = document.querySelectorAll('.cell');
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      const row = parseInt(button.getAttribute('data-row'));
-      const col = parseInt(button.getAttribute('data-col'));
-      game.handleButtonClick(row, col, button);
+  const cells = document.querySelectorAll('.cell');
+  const resetButton = document.getElementById('reset');
+  cells.forEach(cell => {
+    cell.addEventListener('click', () => {
+      const row = parseInt(cell.getAttribute('data-row'));
+      const col = parseInt(cell.getAttribute('data-col'));
+      game.placePiece(row, col, cell);
     });
+  });
+  resetButton.addEventListener('click', () => {
+    game.resetGame();
   });
 });
