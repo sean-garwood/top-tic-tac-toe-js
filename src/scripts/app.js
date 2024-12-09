@@ -8,7 +8,7 @@ const game = (function () {
   const board = (function (dimension = 3) {
     const numberOfRows = dimension;
     let rows = [
-      [0, 0, 0],   // OPTIMIZE
+      [0, 0, 0],
       [0, 0, 0],
       [0, 0, 0]
     ];
@@ -53,8 +53,6 @@ const game = (function () {
       let result = 0;
 
       const getLines = (function () {
-        // OPTIMIZE: I'm sure there is an array library function that achieves
-        //           this and is much cleaner
         const allLines = (function () {
           let lines = [];
           [rows, columns(), diagonals()]
@@ -102,7 +100,6 @@ const game = (function () {
     const winnerSpan = document.getElementById('winner');
     if (winner === null) {
       if (turnNumber > maxTurns) {
-        // make winnerParagraph visible (hiddne by default)
         winnerParagraph.style.display = 'block';
         winnerSpan.innerText = 'It\'s a draw!';
       }
@@ -115,12 +112,7 @@ const game = (function () {
 
   function placePiece(row, col, button) {
     const player = (turnNumber % 2) ? players.p1 : players.p2;
-    const displayTurnNumber = function () {
-      const turnNumberSpan = document.getElementById('turn-number');
-      turnNumberSpan.innerText = `${turnNumber}`;
-    }
 
-    displayTurnNumber();
     if (board.isEmptyAt(row, col)) {
       board.rows[row][col] = player.piece;
       button.innerText = player.piece === 1 ? 'X' : 'O';
@@ -130,6 +122,7 @@ const game = (function () {
         if (gameResult) {
           winner = (gameResult === 1) ? players.p1 : players.p2;
           printGameResult();
+          removeCellListeners();
           return;
         }
       }
@@ -164,25 +157,35 @@ const game = (function () {
       winner = null;
     })();
 
-    const resetDisplay = (function () {
-      document.getElementById('winner-name').style.display = 'none';
-      document.getElementById('turn-number').innerText = '1';
-    })();
+    document.getElementById('winner-name').style.display = 'none';
+    addCellListeners();
   }
 
-  return { placePiece, resetGame };
+  function removeCellListeners() {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => {
+      const newCell = cell.cloneNode(true);
+      cell.parentNode.replaceChild(newCell, cell);
+    });
+  }
+
+  function addCellListeners() {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => {
+      cell.addEventListener('click', () => {
+        const row = parseInt(cell.getAttribute('data-row'));
+        const col = parseInt(cell.getAttribute('data-col'));
+        game.placePiece(row, col, cell);
+      });
+    });
+  }
+
+  return { placePiece, resetGame, addCellListeners };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-  const cells = document.querySelectorAll('.cell');
   const resetButton = document.getElementById('reset');
-  cells.forEach(cell => {
-    cell.addEventListener('click', () => {
-      const row = parseInt(cell.getAttribute('data-row'));
-      const col = parseInt(cell.getAttribute('data-col'));
-      game.placePiece(row, col, cell);
-    });
-  });
+  game.addCellListeners();
   resetButton.addEventListener('click', () => {
     game.resetGame();
   });
