@@ -107,67 +107,56 @@ const game = (function () {
     }
   })();
 
-  const takeTurn = function () {
-    const player = (turnNumber % 2) ? players.p1 : players.p2;
-    board.printBoard(turnNumber);
-
-    const randomCoord = () => {
-      return Math.floor(Math.random() * 100) % board.numberOfRows;
-    };
-
-    const tryToPlacePiece = function (m, n) {
-      const placePiece = (row, col) => {
-        board.rows[row][col] = player.piece;
-      };
-
-      if (board.isEmptyAt(m, n)) {
-        placePiece(m, n);
-        turnNumber++;
-        return true;
-      }
-      else {
-        console.error(`
-            *********ERROR ILLEGAL MOVE*********
-            ${player.name} tried to place on row ${m}, col ${n}.
-            THE BOARD IS OCCUPIED AT THAT POSITION BY
-             ${board.rows[m][n] % 2 ? players.p1.name : players.p2.name}.`);
-        return false;
-      }
-    }
-
-    const doTakeTurn = function () {
-      const chosenRow = randomCoord();
-      const chosenCol = randomCoord();
-
-      console.warn(`your turn, ${player.name}.`);
-      if (!tryToPlacePiece(chosenRow, chosenCol)) {
-        return;
-      };
-      console.warn(`${player.name} placed on row ${chosenRow},
-        col ${chosenCol}.`);
-    };
-
-    doTakeTurn();
-    if (turnNumber >= 5) {
-      const gameResult = board.checkResult();
-      if (gameResult) {
-        winner = (gameResult === 1) ? players.p1 : players.p2;
-        console.warn(`you win, ${winner.name}!`);
-        return gameResult;
-      }
-    }
-
-    return 0;
-  };
-
   const printGameResult = function () {
+    const winnerParagraph = document.getElementById('winner-name');
+    const winnerSpan = document.getElementById('winner');
     if (winner === null) {
-      console.warn('It\'s a draw!');
+      if (turnNumber > maxTurns) {
+        // make winnerParagraph visible (hiddne by default)
+        winnerParagraph.style.display = 'block';
+        winnerSpan.innerText = 'It\'s a draw!';
+      }
     }
-    console.warn('final position:');
-    board.printBoard(--turnNumber);
+    else {
+      winnerParagraph.style.display = 'block';
+      winnerSpan.innerText = `${winner.name} wins!`;
+    }
   }
 
-  while ((takeTurn() === 0) && (turnNumber <= maxTurns)) { ; }
-  printGameResult();
+  function handleButtonClick(row, col, button) {
+    const player = (turnNumber % 2) ? players.p1 : players.p2;
+    if (board.isEmptyAt(row, col)) {
+      board.rows[row][col] = player.piece;
+      button.innerText = player.piece === 1 ? 'X' : 'O';
+      turnNumber++;
+      if (turnNumber >= 5) {
+        const gameResult = board.checkResult();
+        if (gameResult) {
+          winner = (gameResult === 1) ? players.p1 : players.p2;
+          printGameResult();
+          return;
+        }
+      }
+    } else {
+      console.error(`
+            *********ERROR ILLEGAL MOVE*********
+            ${player.name} tried to place on row ${row}, col ${col}.
+            THE BOARD IS OCCUPIED AT THAT POSITION BY
+             ${board.rows[row][col] % 2 ? players.p1.name : players.p2.name}.`);
+    }
+    printGameResult();
+  }
+
+  return { handleButtonClick, winner };
 })();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const buttons = document.querySelectorAll('.cell');
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const row = parseInt(button.getAttribute('data-row'));
+      const col = parseInt(button.getAttribute('data-col'));
+      game.handleButtonClick(row, col, button);
+    });
+  });
+});
