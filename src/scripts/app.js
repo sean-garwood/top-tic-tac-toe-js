@@ -175,18 +175,16 @@ const game = (function () {
       cell.addEventListener('click', () => {
         const row = parseInt(cell.getAttribute('data-row'));
         const col = parseInt(cell.getAttribute('data-col'));
-        game.placePiece(row, col, cell);
+        placePiece(row, col, cell);
       });
     });
   }
 
-  return { placePiece, resetGame, addCellListeners };
-})();
-
-document.addEventListener('DOMContentLoaded', () => {
-  const resetButton = document.getElementById('reset');
-  game.addCellListeners();
-  resetButton.addEventListener('click', () => {
-    game.resetGame();
+  document.addEventListener('DOMContentLoaded', () => {
+    const resetButton = document.getElementById('reset');
+    addCellListeners();
+    resetButton.addEventListener('click', () => {
+      resetGame();
+    });
   });
-});
+})();
