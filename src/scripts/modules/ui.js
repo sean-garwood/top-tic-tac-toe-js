@@ -11,13 +11,17 @@ const ui = (function () {
     const cells = document.querySelectorAll('.cell');
     const errorList = document.getElementById('errors-list');
     const playerTurnInfoElement = document.getElementById('player-turn');
-    const resetButton = document.getElementById('reset');
 
     displayPlayerTurn();
     addCellListeners();
-    resetButton.addEventListener('click', () => {
-      reset();
-    });
+
+    function addCellListeners() {
+      cells.forEach(cell => {
+        cell.addEventListener('click', () => {
+          turnListener(cell);
+        });
+      });
+    }
 
     function clearErrors() {
       errorList.innerHTML = '';
@@ -34,20 +38,30 @@ const ui = (function () {
     };
 
     function displayErrors(errors) {
-      clearPlayerTurn();
+      clearErrors();
       errorList.style.display = 'block';
       errors.forEach((error) => {
         const li = document.createElement('li');
         errorList.appendChild(li);
         li.innerText = error;
       });
-      displayPlayerTurn();
     };
+
+    function getCurrentPlayer() {
+      let player;
+      if (game.turnNumber % 2) {
+        player = players.p1;
+      } else {
+        player = players.p2;
+      }
+      return player;
+    }
 
     function printGameResult(outcome) {
       const winnerParagraph = document.getElementById('winner-name');
       const winnerSpan = document.getElementById('winner');
       winnerParagraph.style.display = 'block';
+      clearPlayerTurn();
       switch (outcome) {
         case game.turnOutcomes.WIN_P1:
           winnerSpan.innerText = players.p1.name;
@@ -66,22 +80,6 @@ const ui = (function () {
         const newCell = cell.cloneNode(true);
         cell.parentNode.replaceChild(newCell, cell);
       });
-    }
-
-    function reset() {
-      const cells = document.querySelectorAll('.cell');
-
-      const clearText = (function () {
-        cells.forEach(cell => {
-          cell.innerText = '';
-        });
-      })();
-
-      game.reset();
-      document.getElementById('winner-name').style.display = 'none';
-      clearErrors();
-      removeCellListeners();
-      addCellListeners();
     }
 
     function turnListener(cell) {
@@ -107,24 +105,6 @@ const ui = (function () {
           displayPlayerTurn();
           break;
       }
-    }
-
-    function addCellListeners() {
-      cells.forEach(cell => {
-        cell.addEventListener('click', () => {
-          turnListener(cell);
-        });
-      });
-    }
-
-    function getCurrentPlayer() {
-      let player;
-      if (game.turnNumber % 2) {
-        player = players.p1;
-      } else {
-        player = players.p2;
-      }
-      return player;
     }
   }
 

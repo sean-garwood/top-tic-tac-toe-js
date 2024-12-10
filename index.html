@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TOP | Tic-Tac-Toe | JS</title>
-  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="src/styles/style.css">
 </head>
 
 <body>
@@ -13,8 +13,6 @@
     <h1>Tic-Tac-Toe</h1>
   </header>
   <main>
-    <!-- TODO: player names form -->
-    <!-- modal/dialog? -->
     <dialog open>
       <form id="form" method="dialog">
         <legend>Enter your names.</legend>
@@ -51,19 +49,17 @@
     </ul>
     <div class="game-info-container">
       <p id="player-turn"></p>
-      <p id="winner-name"><span id="winner"></span></p>
+      <p id="winner-name">Winner: <span id="winner"></span></p>
     </div>
     </div>
     <div class="game-actions-container">
-      <div id="game-actions">
-        <button id="reset">Reset game</button>
-      </div>
+      <a href="" id="reset">Reset game</a>
     </div>
   </main>
   <footer>
     <p>&copy; 2024 Sean Garwood</p>
   </footer>
-  <script type="module" src="scripts/app.js"></script>
+  <script type="module" src="src/scripts/app.js"></script>
 </body>
 
 </html>
