@@ -13,6 +13,20 @@
     <h1>Tic-Tac-Toe</h1>
   </header>
   <main>
+    <!-- TODO: player names form -->
+    <!-- modal/dialog? -->
+    <dialog open>
+      <form id="form" method="dialog">
+        <legend>Enter your names.</legend>
+        <fieldset>
+          <label for="player1">Player 1</label>
+          <input type="text" id="player1" name="player1" default="Player 1">
+          <label for="player2">Player 2</label>
+          <input type="text" id="player2" name="player2" default="Player 2">
+          <button type="submit">Start game</button>
+        </fieldset>
+      </form>
+    </dialog>
     <h2>Game board</h2>
     <div class="game-board-container">
       <div id="game-board">
@@ -33,8 +47,10 @@
         </div>
       </div>
     </div>
+    <ul id="errors-list">
+    </ul>
     <div class="game-info-container">
-      <!-- TODO: player names form -->
+      <p id="player-turn"></p>
       <p id="winner-name"><span id="winner"></span></p>
     </div>
     </div>
@@ -47,7 +63,7 @@
   <footer>
     <p>&copy; 2024 Sean Garwood</p>
   </footer>
-  <script src="scripts/app.js"></script>
+  <script type="module" src="scripts/app.js"></script>
 </body>
 
 </html>

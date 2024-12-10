@@ -52,6 +52,13 @@ footer {
   width: 100%;
 }
 
+#errors-list {
+  display: none;
+  list-style-type: none;
+  padding: 1em;
+  background-color: #ffcccc;
+}
+
 #game-board {
   display: flex;
   flex-wrap: wrap;
