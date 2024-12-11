@@ -1,9 +1,15 @@
-import BoardDimensions from './board-dimensions.js';
+import BoardDimensions from './dimensions.js';
 import Square from './square.js';
 
 export default class Row extends BoardDimensions {
-  #length = super(y);
-  #squares = Array.from({ length: this.#length }, () => new Square());
+  #length;
+  #squares;
+  constructor() {
+    this.#length = super(y);
+    this.#squares = Array.from(
+      { length: this.#length }, () => new Square()
+    );
+  }
   get squares() {
     return this.#squares;
   }

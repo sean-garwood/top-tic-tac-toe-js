@@ -1,12 +1,23 @@
+import Line from './board/line.js';
+import BoardDimensions from './board/dimensions.js';
+
 export default class Board extends BoardDimensions {
-  #width = super(x);
-  #height = super(y);
-  #rows = Array.from({ length: this.#height }, () => new Line());
-  get rows() {
-    return this.#rows;
+  #width;
+  #height;
+  #rows;
+  constructor() {
+    super();
+    this.#width = super.x;
+    this.#height = super.y;
+    this.#rows = Array.from(
+      { length: this.#height }, () => new Line()
+    );
+  }
+  get isWon() {
+    return this.#lines().some(line => line.isWinning());
   }
 
-  columns() {
+  #columns() {
     return this.#rows.reduce((columns, row) => {
       row.squares.forEach((square, index) => {
         columns[index] = columns[index] || [];
@@ -16,7 +27,7 @@ export default class Board extends BoardDimensions {
     }, []);
   }
 
-  diagonals() {
+  #diagonals() {
     const diagonals = [[], []];
     this.#rows.forEach((row, rowIndex) => {
       row.squares.forEach((square, squareIndex) => {
@@ -31,11 +42,10 @@ export default class Board extends BoardDimensions {
     return diagonals;
   }
 
-  lines() {
-    return this.#rows.concat(this.columns(), this.diagonals());
+  #lines() {
+    return this.#rows.concat(this.#columns(), this.#diagonals());
   }
 
-  isWon() {
-    return this.lines().some(line => line.isWinning());
-  }
 };
+
+let board = new Board();
