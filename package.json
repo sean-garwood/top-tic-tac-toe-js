@@ -1,0 +1,13 @@
+{
+  "name": "top-tic-tac-toe",
+  "version": "1.0.0",
+  "description": "JavaScript implementation of tic-tac-toe.",
+  "main": ".src/scripts/classes/game/board.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
