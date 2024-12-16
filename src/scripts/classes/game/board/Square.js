@@ -8,15 +8,15 @@ export default class Square {
   get markerValue() { return this.#markerValue; }
   set markerValue(value) { this.#markerValue = value; }
 
-  markX() {
+  #markX() {
     this.#markerValue = 1;
     this.#marker = Square.markers[0];
   }
-  markO() {
+  #markO() {
     this.#markerValue = 2;
     this.#marker = Square.markers[1];
   }
   mark(playerNumber) {
-    playerNumber % 2 === 0 ? this.markO() : this.markX();
+    playerNumber % 2 === 0 ? this.#markO() : this.#markX();
   }
 }

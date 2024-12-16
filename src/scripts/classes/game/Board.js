@@ -67,11 +67,4 @@ export default class Board extends Dimensions {
     return Array.from(
       { length: numberOfLines }, () => new Line());
   }
-
-  print() {
-    // pretty print the board
-    this.#rows.forEach(row => {
-      console.log(row.squares.map(square => square.marker));
-    });
-  }
 }

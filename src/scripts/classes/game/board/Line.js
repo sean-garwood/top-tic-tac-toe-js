@@ -10,19 +10,17 @@ export default class Line extends Dimensions {
     this.#squares = Array.from(
       { length: this.#length }, () => new Square());
   }
-  get length() {
-    return this.#length;
-  }
-  get squares() {
-    return this.#squares;
-  }
+  get length() { return this.#length; }
+  get squares() { return this.#squares; }
 
   setSquareAt(index, value) {
     this.#squares[index].markerValue = value;
   }
 
   isWinning() {
-    const markers = this.#squares.map(square => square.markerValue);
+    const markers = this.#squares
+      .map(square => square.markerValue);
+
     return markers[0]
       && markers[0] === markers[1]
       && markers[1] === markers[2];
